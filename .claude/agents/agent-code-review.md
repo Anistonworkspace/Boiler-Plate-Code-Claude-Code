@@ -45,12 +45,17 @@ Read the changed files, then check in this exact order:
 - [ ] Sensitive fields end in `Encrypted`
 - [ ] Multi-table writes use `prisma.$transaction()`
 
-### 5. Frontend (`rule-frontend.md`)
+### 5. Frontend (`rule-frontend.md` + `skill-ui-ux-checklist.md`)
 - [ ] All API calls use RTK Query hooks — no raw `fetch()` or `axios`
 - [ ] Every query endpoint has `providesTags`
 - [ ] Every mutation endpoint has `invalidatesTags`
 - [ ] Loading + error states handled in every component
 - [ ] Tailwind only — no inline styles
+- [ ] No hardcoded hex literals — every color resolves to a CSS variable from the spec
+- [ ] Existing primitives reused: `.btn`, `.input-field`, `.status-pill`, `.badge`, `.sidebar-item`, `.skeleton`, `.dropdown-panel`
+- [ ] Animation timings match spec (productive 70/100/150ms, expressive 250ms, easing `cubic-bezier(0.16, 1, 0.3, 1)`)
+- [ ] Dark mode: every new color has a `.dark` override
+- [ ] Run `agent-ui-ux` on any new page or shared component before merging
 
 ### 6. State machines (`rule-state-machines.md`)
 - [ ] All status enum values have a handler in the service

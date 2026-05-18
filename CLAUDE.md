@@ -129,6 +129,7 @@ Key URLs:
 | `.claude/skills/skill-auth-patterns.md` | JWT flow, requirePermission, self-approval guard |
 | `.claude/skills/skill-state-machine-patterns.md` | updateMany lock, terminal states, side effects |
 | `.claude/skills/skill-testing-patterns.md` | Service mocks, component tests, Playwright E2E |
+| `.claude/skills/skill-ui-ux-checklist.md` | Monday Aniston design system — all tokens, component primitives, animation timings, 24-section conformance checklist |
 
 ---
 

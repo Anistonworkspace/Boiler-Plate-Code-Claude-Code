@@ -87,8 +87,9 @@ View layer — checks the wiring between React components and RTK Query API slic
 ```
 
 ## Skills to read
+- `.claude/skills/skill-ui-ux-checklist.md` — design tokens, component primitives (§6 buttons, §10 inputs, §12 modals, §15 toasts, §16 empty states), animation timings
 - `.claude/skills/skill-rtk-query-patterns.md` — correct tag patterns
 
 ## Rules enforced
-- `rule-frontend.md` — RTK Query, loading states, Tailwind
+- `rule-frontend.md` — RTK Query, loading states, Tailwind, Monday Aniston tokens
 - `rule-security-rbac.md` — role-based UI rendering
