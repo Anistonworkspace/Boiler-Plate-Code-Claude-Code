@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body { @apply font-body antialiased; }
+  h1, h2, h3, h4, h5, h6 { @apply font-heading; }
+  code, pre, kbd, samp { @apply font-mono; }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-glass rounded-xl;
+  }
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-sm border border-white/30 shadow-glass rounded-lg;
+  }
+  .brand-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .input-base {
+    @apply block w-full rounded-lg border border-slate-300 bg-white/80 px-3.5 py-2.5 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
+  }
+}
