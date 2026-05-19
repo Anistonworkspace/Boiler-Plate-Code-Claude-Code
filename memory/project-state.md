@@ -1,6 +1,6 @@
 # Project State
 
-**Last updated:** 2026-05-18 (Phase 4 complete — MVC enforcement, skills directory, god-level agent rewrites)
+**Last updated:** 2026-05-18 (Phase 6 complete — auto-dispatch hooks, session memory, compaction recovery, one-command setup)
 
 ---
 
@@ -22,15 +22,25 @@
 - ✅ `settings.local.json`
 - ✅ `hooks/pre-command.sh` — blocks dangerous ops, reminds about Prisma/memory
 - ✅ `hooks/lint-on-save.sh` — reminds about schema/enum sync, auth sensitivity
-- ✅ `hooks/on-stop.sh` — end-of-session memory checklist
+- ✅ `hooks/on-prompt.sh` — UserPromptSubmit: auto-detects task type, injects agent+skill dispatch context
+- ✅ `hooks/on-stop.sh` — writes session stub to memory/sessions/, prints checklist
+- ✅ `hooks/lint-on-save.sh` — reminds about schema/enum sync, auth sensitivity
+- ✅ `hooks/pre-command.sh` — blocks dangerous ops, reminds about Prisma/memory
 - ✅ Rules (15 files, all prefixed `rule-`): rule-mvc-architecture (NEW), rule-api, rule-backend, rule-database, rule-frontend, rule-security-rbac, rule-git-safety, rule-secrets-policy, rule-database-migrations, rule-state-machines, rule-testing-standards, rule-bug-fix-process, rule-audit-standards, rule-logic-analysis, rule-memory-system
 - ✅ Agents (17 files, all prefixed `agent-`, model: sonnet — all rewritten enterprise/god-level)
-- ✅ Skills (6 files in `.claude/skills/`): skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns
-- ✅ Commands (15 files): start, done, new-module, audit, health, deploy, release-check, fix-critical, security-scan, explain, trace, migrate, optimize, add-tests, document
+- ✅ Skills (7 files in `.claude/skills/`): skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns, skill-ui-ux-checklist
+- ✅ Commands (16 files): start, done, compact-save (NEW), new-module, audit, health, deploy, release-check, fix-critical, security-scan, explain, trace, migrate, optimize, add-tests, document
 - ✅ Old stub files deleted (40 total)
 
 ### Infrastructure
 - ✅ `docker/docker-compose.yml` — Postgres 16 + Redis 7, health checks, named volumes
+- ✅ `docker/docker-compose.dev.yml` — lightweight (postgres + redis only, for daily dev)
+- ✅ `docker/docker-compose.fullstack.yml` — all 4 services (postgres + redis + backend + frontend)
+- ✅ `backend/Dockerfile` — tsup build + Node 20 Alpine runtime
+- ✅ `frontend/Dockerfile` — Vite build + Nginx serve
+- ✅ `frontend/nginx.conf` — SPA fallback, gzip, security headers
+- ✅ `scripts/setup.sh` — Linux/Mac one-command setup (auto-generates secrets, starts Docker, seeds DB)
+- ✅ `scripts/setup.ps1` — Windows PowerShell equivalent
 - ✅ `docker/.env.docker` — Docker-level env vars template
 - ✅ `nginx/nginx.conf` — HTTPS, SPA fallback, WebSocket upgrade, security headers, gzip
 - ✅ `.github/workflows/ci.yml` — On PR: install, typecheck, test, build
@@ -122,6 +132,9 @@
 
 ### Memory & coordination
 - ✅ `memory/` system — fully operational
+- ✅ `memory/sessions/` — session logs (auto-written by /done + on-stop.sh)
+- ✅ `memory/sessions/compact/` — compaction recovery saves (written by /compact-save)
+- ✅ `memory/AUTO-DISPATCH.md` — keyword → agent mapping read by on-prompt.sh
 
 ---
 
@@ -146,10 +159,18 @@
 
 ## How to start (new employee)
 
+**One command (recommended):**
+```bash
+bash scripts/setup.sh      # macOS/Linux/WSL2
+.\scripts\setup.ps1        # Windows PowerShell
+npm run dev
+```
+
+**Manual:**
 ```
 1. npm install
 2. cp .env.example .env  →  fill 5 values
-3. cd docker && docker compose up -d
+3. npm run docker:dev
 4. npm run db:migrate && npm run db:seed
 5. npm run dev
 6. Open Claude Code → /start

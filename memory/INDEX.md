@@ -6,9 +6,10 @@
 
 - Project: **Boilerplate App** — Production-grade fullstack PWA boilerplate
 - Owner: Aniston Technologies LLP
-- Stack: React 18 + Vite + Tailwind + RTK Query · Express + Prisma + PostgreSQL + Redis + BullMQ + Socket.io · Python FastAPI (AI) · Electron · Capacitor
+- Stack: React 18 + Vite + Tailwind + RTK Query · Express + Prisma + PostgreSQL + Redis + BullMQ + Socket.io · Electron · Capacitor
 - Project conventions: see [conventions.md](conventions.md) and `.claude/rules/`
 - Current state: see [project-state.md](project-state.md)
+- Recent sessions: see [sessions/](sessions/) | Compaction recoveries: [sessions/compact/](sessions/compact/)
 
 ## Start-of-work checklist
 
@@ -21,6 +22,7 @@ When an agent (or fresh chat) begins, do these in order:
 5. Scan [plans/_active/](plans/_active/) → see if there's an in-flight plan you should continue.
 6. Skim recent [changes/](changes/) entries (last 2-3 days) → understand recent code shifts.
 7. Read relevant [decisions/](decisions/) ADRs for the area you'll touch.
+8. Check [sessions/compact/](sessions/compact/) for the latest compaction save — if one exists from today, read it to recover mid-session context.
 
 Only then start the user's task.
 
@@ -44,6 +46,8 @@ When wrapping up a task:
 | Available agents | `/.claude/agents/*.md` |
 | Quick slash-commands | `/.claude/commands/*.md` |
 | Tech stack & architecture decisions | [decisions/](decisions/) |
+| Session logs (auto-written by /done) | [sessions/](sessions/) |
+| Context compaction saves | [sessions/compact/](sessions/compact/) |
 | Glossary of project terms | [glossary.md](glossary.md) |
 | Prisma schema | `/prisma/schema.prisma` |
 | RBAC permissions matrix | `/shared/src/permissions.ts` |

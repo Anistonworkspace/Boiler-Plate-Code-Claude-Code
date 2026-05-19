@@ -4,11 +4,46 @@ This guide takes you from zero to a running development environment in under 10 
 
 ---
 
-## Prerequisites
+## One-Command Setup (Recommended)
+
+The fastest way to get started. One command does everything: copies `.env`, generates secrets, starts Docker, installs dependencies, runs migrations, and seeds the database.
+
+**macOS / Linux / WSL2:**
+```bash
+git clone <repo-url>
+cd boilerplate-app
+bash scripts/setup.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone <repo-url>
+cd boilerplate-app
+.\scripts\setup.ps1
+```
+
+Then start the app:
+```bash
+npm run dev
+```
+
+Open:
+- **App** → http://localhost:5173
+- **API docs** → http://localhost:4000/api/docs
+
+Open VS Code, start a Claude chat, type `/start`. You're in god mode.
+
+**That's it.** Everything below is the manual version for troubleshooting or advanced setups.
+
+---
+
+## Manual Setup (Advanced)
+
+### Prerequisites
 
 Install these before you start:
 
-| Tool | Version | How to install |
+| Tool | Version | Install |
 |------|---------|----------------|
 | Node.js | 20+ | https://nodejs.org |
 | npm | 10+ | comes with Node |

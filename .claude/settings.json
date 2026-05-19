@@ -70,6 +70,9 @@
   "includeGitInstructions": true,
   "respectGitignore": true,
   "hooks": {
+    "UserPromptSubmit": [{
+      "hooks": [{ "type": "command", "command": ".claude/hooks/on-prompt.sh" }]
+    }],
     "PreToolUse": [{
       "matcher": "Bash",
       "hooks": [{ "type": "command", "command": ".claude/hooks/pre-command.sh" }]

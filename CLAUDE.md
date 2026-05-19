@@ -1,3 +1,36 @@
+<!-- ═══════════════════════════════════════════════════════════════════════
+     MANDATORY — READ BEFORE EVERY RESPONSE
+     ═══════════════════════════════════════════════════════════════════════
+
+  AUTO-DISPATCH: Before writing any code, check the task type and apply the
+  matching agent(s) and skill(s) below. Do NOT wait for the user to name an
+  agent — apply them automatically based on the task.
+
+  | Task type                           | Apply agent(s)                        | Read skill(s)                    |
+  |-------------------------------------|---------------------------------------|----------------------------------|
+  | UI / component / page / design      | agent-ui-ux → agent-frontend-wiring   | skill-ui-ux-checklist.md         |
+  | New module / scaffold / CRUD        | agent-planner → agent-code-review     | skill-mvc-patterns.md            |
+  | Bug / error / crash / fix           | agent-debugger → agent-logic-analyzer | —                                |
+  | Test / spec / coverage              | agent-testing → agent-test-writer     | skill-testing-patterns.md        |
+  | Security / auth / RBAC / JWT        | agent-api-security → agent-security   | skill-auth-patterns.md           |
+  | Database / migration / Prisma       | agent-database                        | skill-prisma-patterns.md         |
+  | Deploy / CI / Docker / release      | agent-devops                          | —                                |
+  | Performance / N+1 / paginate        | agent-performance                     | skill-prisma-patterns.md         |
+  | Workflow / state machine / approval | agent-logic-analyzer                  | skill-state-machine-patterns.md  |
+  | Code review / audit                 | agent-code-review                     | (all relevant skills)            |
+
+  CORE RULES (always, no exceptions):
+  1. MVC: Controller thin → Service thick → Prisma model (rule-mvc-architecture.md)
+  2. Every Prisma query: organizationId + deletedAt:null (rule-security-rbac.md)
+  3. Every API response: { success, data, meta } envelope (rule-api.md)
+  4. No hardcoded hex colors — CSS variables only (skill-ui-ux-checklist.md)
+  5. No .env commits, no APK in git, no secrets in code (rule-secrets-policy.md)
+
+  CONTEXT RECOVERY: If this conversation starts with a compaction summary,
+  run /compact-save IMMEDIATELY to save it to memory/sessions/compact/.
+  Then run /start to reload full project state.
+═══════════════════════════════════════════════════════════════════════════ -->
+
 # Boilerplate App — AI Agent Entry Point
 
 > **For freshers:** You don't need to read every file. Just describe what you want to build and the agents handle everything. Start with `/start`, then ask for what you need.
@@ -81,6 +114,7 @@ Key URLs:
 |---------|-------------|
 | `/start` | Load all memory context before beginning work |
 | `/done` | Save progress, update memory, release locks |
+| `/compact-save` | Save compaction summary to memory (run immediately after context compaction) |
 | `/build <module>` | Scaffold a complete MVC module (backend + frontend + tests) |
 | `/audit` | Run all 10 audit dimensions across the entire codebase |
 | `/trace <workflow>` | Trace a full UI → DB → socket workflow and find gaps |
