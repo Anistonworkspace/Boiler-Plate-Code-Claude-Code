@@ -1,6 +1,6 @@
 # Project State
 
-**Last updated:** 2026-05-18 (Phase 6 complete — auto-dispatch hooks, session memory, compaction recovery, one-command setup)
+**Last updated:** 2026-05-20 (Phase 7 complete — 25 enterprise-level skill files added, CLAUDE.md skills table expanded to 32 skills)
 
 ---
 
@@ -28,7 +28,12 @@
 - ✅ `hooks/pre-command.sh` — blocks dangerous ops, reminds about Prisma/memory
 - ✅ Rules (15 files, all prefixed `rule-`): rule-mvc-architecture (NEW), rule-api, rule-backend, rule-database, rule-frontend, rule-security-rbac, rule-git-safety, rule-secrets-policy, rule-database-migrations, rule-state-machines, rule-testing-standards, rule-bug-fix-process, rule-audit-standards, rule-logic-analysis, rule-memory-system
 - ✅ Agents (17 files, all prefixed `agent-`, model: sonnet — all rewritten enterprise/god-level)
-- ✅ Skills (7 files in `.claude/skills/`): skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns, skill-ui-ux-checklist
+- ✅ Skills (32 files in `.claude/skills/`): 7 original + 25 enterprise-level additions
+  - Core: skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns, skill-ui-ux-checklist
+  - Data & Comms: skill-socket-patterns, skill-background-jobs-patterns, skill-notification-patterns, skill-caching-patterns, skill-webhook-patterns
+  - Security: skill-encryption-patterns, skill-audit-log-patterns, skill-rbac-advanced-patterns, skill-input-sanitization-patterns
+  - UI/Frontend: skill-form-patterns, skill-table-patterns, skill-modal-patterns, skill-error-handling-patterns, skill-search-filter-patterns, skill-chart-patterns, skill-infinite-scroll-patterns
+  - Operations: skill-file-upload-patterns, skill-report-export-patterns, skill-bulk-operations-patterns, skill-pwa-patterns, skill-monitoring-patterns, skill-multitenancy-patterns, skill-capacitor-patterns, skill-electron-patterns, skill-i18n-patterns
 - ✅ Commands (16 files): start, done, compact-save (NEW), new-module, audit, health, deploy, release-check, fix-critical, security-scan, explain, trace, migrate, optimize, add-tests, document
 - ✅ Old stub files deleted (40 total)
 

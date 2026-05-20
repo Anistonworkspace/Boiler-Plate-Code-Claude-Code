@@ -155,15 +155,57 @@ Key URLs:
 
 ## Skills Reference (agents read these for code patterns)
 
+### Core Architecture
 | Skill file | Contains |
 |-----------|---------|
-| `.claude/skills/skill-mvc-patterns.md` | Controller/service/guard/pagination templates |
-| `.claude/skills/skill-prisma-patterns.md` | org scoping, $transaction, optimistic lock, N+1 fix |
-| `.claude/skills/skill-rtk-query-patterns.md` | API slice, providesTags, invalidatesTags, cache |
-| `.claude/skills/skill-auth-patterns.md` | JWT flow, requirePermission, self-approval guard |
-| `.claude/skills/skill-state-machine-patterns.md` | updateMany lock, terminal states, side effects |
-| `.claude/skills/skill-testing-patterns.md` | Service mocks, component tests, Playwright E2E |
-| `.claude/skills/skill-ui-ux-checklist.md` | Monday Aniston design system — all tokens, component primitives, animation timings, 24-section conformance checklist |
+| `skill-mvc-patterns.md` | Controller/service/guard/pagination templates |
+| `skill-prisma-patterns.md` | org scoping, $transaction, optimistic lock, N+1 fix |
+| `skill-rtk-query-patterns.md` | API slice, providesTags, invalidatesTags, cache |
+| `skill-auth-patterns.md` | JWT flow, requirePermission, self-approval guard |
+| `skill-state-machine-patterns.md` | updateMany lock, terminal states, side effects |
+| `skill-testing-patterns.md` | Service mocks, component tests, Playwright E2E |
+| `skill-ui-ux-checklist.md` | Monday Aniston design system — all tokens, component primitives, animation timings, 24-section conformance checklist |
+
+### Data & Communication
+| Skill file | Contains |
+|-----------|---------|
+| `skill-socket-patterns.md` | Socket.io rooms, typed events, emit after transaction, RTK invalidation |
+| `skill-background-jobs-patterns.md` | BullMQ queues, email/notification/export workers, retry/backoff |
+| `skill-notification-patterns.md` | Notification model, socket real-time, unread count badge |
+| `skill-caching-patterns.md` | Redis cache-aside, CacheKeys, TTL strategy, stampede prevention |
+| `skill-webhook-patterns.md` | HMAC validation, outgoing retry, webhook log, event catalog |
+
+### Security & Compliance
+| Skill file | Contains |
+|-----------|---------|
+| `skill-encryption-patterns.md` | AES-256-GCM, field encryption, safeDecrypt, key rotation |
+| `skill-audit-log-patterns.md` | AuditLog model, before/after snapshots, REDACTED fields, timeline UI |
+| `skill-rbac-advanced-patterns.md` | Permission registry, ownership guards, manager scope, self-approval |
+| `skill-input-sanitization-patterns.md` | DOMPurify XSS, file name sanitization, CSP headers, safe URLs |
+
+### UI & Frontend
+| Skill file | Contains |
+|-----------|---------|
+| `skill-form-patterns.md` | Create/edit forms, multi-step, field array, Zod cross-field |
+| `skill-table-patterns.md` | DataTable, pagination, bulk action bar, mobile card fallback |
+| `skill-modal-patterns.md` | Modal/drawer, delete confirm, edit form reset, portal |
+| `skill-error-handling-patterns.md` | AppError hierarchy, Prisma mapper, global handler, frontend decoder |
+| `skill-search-filter-patterns.md` | URL-synced filters, debounced search, scoped list query |
+| `skill-chart-patterns.md` | Recharts line/bar/donut, KPI cards, date range picker, real-time |
+| `skill-infinite-scroll-patterns.md` | Cursor pagination, IntersectionObserver, RTK Query merge, virtual list |
+
+### Operations & Platform
+| Skill file | Contains |
+|-----------|---------|
+| `skill-file-upload-patterns.md` | Multer, MIME+ext validation, sharp resize, auth-gated static serve |
+| `skill-report-export-patterns.md` | PDFKit, ExcelJS, binary download mutation, large export via BullMQ |
+| `skill-bulk-operations-patterns.md` | CSV import, bulk update/delete, partial failure, BullMQ progress |
+| `skill-pwa-patterns.md` | Workbox, offline, install prompt, push notifications, update prompt |
+| `skill-monitoring-patterns.md` | Winston structured logs, request ID, Sentry, health check, PM2 |
+| `skill-multitenancy-patterns.md` | Org onboarding, subdomain routing, per-tenant config, plan gating |
+| `skill-capacitor-patterns.md` | Android/iOS build, FCM push, camera, deep links, safe area |
+| `skill-electron-patterns.md` | IPC, auto-update, tray, file dialogs, NSIS installer |
+| `skill-i18n-patterns.md` | i18next, en-IN locale, plurals, date/currency format, RTL |
 
 ---
 
