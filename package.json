@@ -2,7 +2,7 @@
   "name": "boilerplate-app",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["frontend", "backend", "shared"],
+  "workspaces": ["frontend", "backend", "shared", "agent-desktop"],
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",

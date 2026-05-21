@@ -16,7 +16,7 @@ export default defineConfig({
         name: 'Boilerplate App',
         short_name: 'Boilerplate',
         description: 'Production-grade fullstack PWA boilerplate',
-        theme_color: '#4f46e5',
+        theme_color: '#0073ea',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',

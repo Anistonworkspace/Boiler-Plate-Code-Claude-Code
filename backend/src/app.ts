@@ -11,6 +11,7 @@ import { requestId, requestLogger } from './middleware/requestLogger.js';
 import { prisma } from './lib/prisma.js';
 import { redis } from './lib/redis.js';
 import { authRouter } from './modules/auth/auth.routes.js';
+import { dashboardRouter } from './modules/dashboard/dashboard.routes.js';
 
 export function createApp(): Express {
   const app = express();
@@ -49,6 +50,7 @@ export function createApp(): Express {
   setupSwagger(app);
 
   app.use('/api/auth', authRouter);
+  app.use('/api/dashboard', dashboardRouter);
 
   app.use((req, _res, next) => next(new NotFoundError(`Route not found: ${req.method} ${req.path}`)));
   app.use(errorHandler);

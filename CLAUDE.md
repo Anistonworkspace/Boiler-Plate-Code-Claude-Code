@@ -126,6 +126,7 @@ Key URLs:
 | `/security-scan` | Run OWASP Top 10 audit |
 | `/release-check` | Final gate before any production deploy |
 | `/fix <description>` | Fix a bug with a proper plan (P0–P3 severity) |
+| `/project-init` | Rename boilerplate for a new project — updates CLAUDE.md, package names, PWA manifest |
 
 ---
 
@@ -179,6 +180,7 @@ Key URLs:
 | `skill-notification-patterns.md` | Notification model, socket real-time, unread count badge |
 | `skill-caching-patterns.md` | Redis cache-aside, CacheKeys, TTL strategy, stampede prevention |
 | `skill-webhook-patterns.md` | HMAC validation, outgoing retry, webhook log, event catalog |
+| `skill-email-patterns.md` | Nodemailer SMTP, BullMQ email worker, welcome/reset/OTP HTML templates |
 
 ### Security & Compliance
 | Skill file | Contains |
@@ -213,6 +215,7 @@ Key URLs:
 | `skill-electron-patterns.md` | IPC, auto-update, tray, file dialogs, NSIS installer |
 | `skill-i18n-patterns.md` | i18next, en-IN locale, plurals, date/currency format, RTL |
 | `skill-rate-limiting-patterns.md` | Redis-backed rate limit, account lockout, 429 frontend handling |
+| `skill-ci-cd-patterns.md` | GitHub Actions CI/deploy/release workflows, PM2, EC2 SSH deploy |
 
 ---
 

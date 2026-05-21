@@ -1,6 +1,4 @@
-/* Google Fonts — Monday Aniston design system */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700&family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
+/* Fonts loaded via <link> in index.html for preconnect performance benefit */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

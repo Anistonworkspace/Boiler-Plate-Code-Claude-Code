@@ -9,8 +9,8 @@ const DashboardPage = lazy(() => import('@/features/dashboard/DashboardPage').th
 
 function PageFallback(): JSX.Element {
   return (
-    <div className="min-h-screen grid place-items-center">
-      <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
+    <div className="min-h-screen grid place-items-center bg-[var(--base-tint)]">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </div>
   );
 }

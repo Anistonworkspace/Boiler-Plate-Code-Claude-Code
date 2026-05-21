@@ -9,7 +9,14 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios",
+    "cap:build:android": "npm run build && npx cap sync android",
+    "cap:build:ios": "npm run build && npx cap sync ios"
   },
   "dependencies": {
     "@boilerplate/shared": "*",

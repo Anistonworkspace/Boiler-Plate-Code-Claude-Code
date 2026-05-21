@@ -10,7 +10,8 @@ const envSchema = z.object({
   REDIS_URL: z.string().default('redis://localhost:6379'),
 
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 chars'),
-  JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 chars'),
+  // Refresh tokens are opaque random bytes (not JWTs) — this is reserved for future JWT refresh signing
+  JWT_REFRESH_SECRET: z.string().min(32).optional(),
   JWT_ACCESS_TTL: z.string().default('15m'),
   JWT_REFRESH_TTL: z.string().default('7d'),
 

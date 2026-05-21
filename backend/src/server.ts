@@ -3,6 +3,7 @@ import { env } from './config/env.js';
 import { createApp } from './app.js';
 import { initSocket } from './sockets/index.js';
 import { storage } from './services/storage.service.js';
+import { logger } from './lib/logger.js';
 import { closeQueues } from './jobs/queues.js';
 import './jobs/workers/email.worker.js';
 import './jobs/workers/notification.worker.js';
@@ -14,12 +15,11 @@ async function main(): Promise<void> {
   initSocket(httpServer);
 
   httpServer.listen(env.PORT, () => {
-    console.log(`[server] Listening on http://localhost:${env.PORT}`);
-    console.log(`[server] Swagger docs at http://localhost:${env.PORT}/api/docs`);
+    logger.info('Server started', { port: env.PORT, docsUrl: `http://localhost:${env.PORT}/api/docs` });
   });
 
   const shutdown = async (signal: string): Promise<void> => {
-    console.log(`[server] ${signal} received — shutting down`);
+    logger.info('Shutdown signal received', { signal });
     httpServer.close();
     await closeQueues();
     process.exit(0);
@@ -28,7 +28,7 @@ async function main(): Promise<void> {
   process.on('SIGINT', () => void shutdown('SIGINT'));
   process.on('SIGTERM', () => void shutdown('SIGTERM'));
   process.on('unhandledRejection', (err) => {
-    console.error('[server] unhandledRejection:', err);
+    logger.error('Unhandled rejection', { error: err instanceof Error ? err.message : String(err) });
   });
 }
 

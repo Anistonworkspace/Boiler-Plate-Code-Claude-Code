@@ -52,6 +52,13 @@ fi
 
 P=$(echo "$PROMPT" | tr '[:upper:]' '[:lower:]')
 
+# Skip skill injection for very short prompts (< 15 words) — saves tokens on
+# simple questions / one-liners where agent dispatch adds no value
+WORD_COUNT=$(echo "$P" | wc -w | tr -d ' ')
+if [ "$WORD_COUNT" -lt 15 ]; then
+  exit 0
+fi
+
 # ── Keyword → dispatch mapping ────────────────────────────────────────────────
 AGENTS=()
 SKILLS=()
@@ -235,6 +242,18 @@ fi
 if echo "$P" | grep -qE "result type|circuit breaker|retry|backoff|dead.letter|jitter|fallback|resilience"; then
   AGENTS+=("agent-logic-creator" "agent-debugger")
   SKILLS+=("skill-error-handling-patterns.md" "skill-background-jobs-patterns.md")
+fi
+
+# ─ Email / Transactional email / SMTP ────────────────────────────────────────
+if echo "$P" | grep -qE "email|smtp|nodemailer|send mail|welcome email|password reset email|template|transactional|otp mail|verification email"; then
+  AGENTS+=("agent-planner")
+  SKILLS+=("skill-email-patterns.md" "skill-background-jobs-patterns.md")
+fi
+
+# ─ CI / CD / GitHub Actions / Deploy pipeline ────────────────────────────────
+if echo "$P" | grep -qE "github actions|ci.cd|pipeline|workflow yaml|\.github|action|deploy job|release job|lint job|test job|build job|continuous integration|continuous deploy"; then
+  AGENTS+=("agent-devops")
+  SKILLS+=("skill-ci-cd-patterns.md")
 fi
 
 # ── Output dispatch context ───────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 # Project State
 
-**Last updated:** 2026-05-21 (Logic Creator Pack added — agent-logic-creator + 6 new/upgraded skills, keyboard shortcuts skill, all dispatch patterns updated)
+**Last updated:** 2026-05-21 (Phase 1–5 complete — all CSS/font/env fixes, dashboard module, PWA icons, Capacitor scripts, Electron workspace, orphaned stub removed, skill-email + skill-ci-cd + /project-init added, on-prompt token efficiency)
 
 ---
 
@@ -28,13 +28,14 @@
 - ✅ `hooks/pre-command.sh` — blocks dangerous ops, reminds about Prisma/memory
 - ✅ Rules (17 files, all prefixed `rule-`): rule-mvc-architecture, rule-api, rule-backend, rule-database, rule-frontend, rule-security-rbac, rule-git-safety, rule-secrets-policy, rule-database-migrations, rule-state-machines, rule-testing-standards, rule-bug-fix-process, rule-audit-standards, rule-logic-analysis, rule-memory-system, rule-naming-conventions, rule-logging-standards
 - ✅ Agents (19 files, all prefixed `agent-`, model: claude-opus-4-7 — all enterprise/god-level)
-- ✅ Skills (37 files in `.claude/skills/`): 7 original + 30 enterprise-level additions (includes Logic Creator Pack + keyboard shortcuts)
+- ✅ Skills (39 files in `.claude/skills/`): 7 original + 32 enterprise-level additions
   - Core: skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns, skill-ui-ux-checklist
-  - Data & Comms: skill-socket-patterns, skill-background-jobs-patterns, skill-notification-patterns, skill-caching-patterns, skill-webhook-patterns
+  - Data & Comms: skill-socket-patterns, skill-background-jobs-patterns, skill-notification-patterns, skill-caching-patterns, skill-webhook-patterns, skill-email-patterns (NEW)
   - Security: skill-encryption-patterns, skill-audit-log-patterns, skill-rbac-advanced-patterns, skill-input-sanitization-patterns
-  - UI/Frontend: skill-form-patterns, skill-table-patterns, skill-modal-patterns, skill-error-handling-patterns, skill-search-filter-patterns, skill-chart-patterns, skill-infinite-scroll-patterns
-  - Operations: skill-file-upload-patterns, skill-report-export-patterns, skill-bulk-operations-patterns, skill-pwa-patterns, skill-monitoring-patterns, skill-multitenancy-patterns, skill-capacitor-patterns, skill-electron-patterns, skill-i18n-patterns
-- ✅ Commands (16 files): start, done, compact-save (NEW), new-module, audit, health, deploy, release-check, fix-critical, security-scan, explain, trace, migrate, optimize, add-tests, document
+  - UI/Frontend: skill-form-patterns, skill-table-patterns, skill-modal-patterns, skill-error-handling-patterns, skill-search-filter-patterns, skill-chart-patterns, skill-infinite-scroll-patterns, skill-keyboard-shortcuts-patterns
+  - Operations: skill-file-upload-patterns, skill-report-export-patterns, skill-bulk-operations-patterns, skill-pwa-patterns, skill-monitoring-patterns, skill-multitenancy-patterns, skill-capacitor-patterns, skill-electron-patterns, skill-i18n-patterns, skill-rate-limiting-patterns, skill-ci-cd-patterns (NEW)
+  - Domain: skill-domain-modeling-patterns, skill-business-rules-patterns, skill-workflow-orchestration-patterns
+- ✅ Commands (17 files): start, done, compact-save, new-module, audit, health, deploy, release-check, fix-critical, security-scan, explain, trace, migrate, optimize, add-tests, document, project-init (NEW)
 - ✅ Old stub files deleted (40 total)
 
 ### Infrastructure
@@ -147,8 +148,8 @@
 
 - ⏳ Backend modules: employee, department, designation, settings (use `/new-module`)
 - ⏳ Frontend feature pages for employee/department/designation/settings
-- ⏳ Real PWA icons (192/512 + maskable variants) — currently placeholders
-- ⏳ `agent-desktop/` — Electron Windows desktop app (optional)
+- ⏳ Real PWA icons (192/512 + maskable variants) — placeholder instructions added in frontend/public/generate-icons.md
+- ✅ `agent-desktop/` — Electron Windows desktop workspace created (main.ts, preload.ts, ipcHandlers, tray, updater, electron-builder.yml)
 
 ---
 
