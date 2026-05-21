@@ -246,3 +246,202 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
 - [ ] 401 auto-refresh is wired in RTK Query base query
 - [ ] No raw Prisma errors or stack traces ever reach API consumers
 - [ ] `NOT_FOUND` is thrown for wrong-org access (never `FORBIDDEN` — don't reveal existence)
+
+---
+
+## Result type (typed errors without exceptions)
+
+Use `Result<T, E>` for operations where failure is expected and the caller must handle it.
+Reserve thrown exceptions for programmer errors and truly unexpected failures.
+
+```typescript
+// shared/src/domain/result.ts
+export type Result<T, E extends string = string> =
+  | { ok: true;  value: T }
+  | { ok: false; error: E; message: string };
+
+export const Ok  = <T>(value: T): Result<T, never> => ({ ok: true, value });
+export const Err = <E extends string>(error: E, message: string): Result<never, E> => ({ ok: false, error, message });
+```
+
+```typescript
+// Usage — callers MUST check .ok before using .value
+type ImportError = 'DUPLICATE_EMAIL' | 'INVALID_DEPARTMENT' | 'QUOTA_EXCEEDED';
+
+static async importEmployee(dto: CreateEmployeeInput, actor: AuthUser): Promise<Result<Employee, ImportError>> {
+  const existing = await prisma.employee.findFirst({
+    where: { email: dto.email, organizationId: actor.organizationId, deletedAt: null },
+  });
+  if (existing) return Err('DUPLICATE_EMAIL', `${dto.email} already exists`);
+
+  const department = await prisma.department.findFirst({
+    where: { id: dto.departmentId, organizationId: actor.organizationId },
+  });
+  if (!department) return Err('INVALID_DEPARTMENT', `Department ${dto.departmentId} not found`);
+
+  const employee = await prisma.employee.create({ data: { ...dto, organizationId: actor.organizationId } });
+  return Ok(employee);
+}
+
+// Caller handles all error branches — no try/catch needed
+const result = await EmployeeService.importEmployee(row, actor);
+if (!result.ok) {
+  switch (result.error) {
+    case 'DUPLICATE_EMAIL':    failures.push({ row, reason: result.message }); break;
+    case 'INVALID_DEPARTMENT': failures.push({ row, reason: result.message }); break;
+    case 'QUOTA_EXCEEDED':     throw new ConflictError(result.message); // escalate this one
+  }
+  continue;
+}
+successCount++;
+```
+
+---
+
+## Circuit breaker for external services
+
+Prevent cascading failures when a third-party API (email, SMS, payment) is down.
+
+```typescript
+// backend/src/lib/circuit-breaker.ts
+interface CircuitBreakerOptions {
+  failureThreshold: number;  // open after N consecutive failures
+  recoveryTimeMs: number;    // half-open after this duration
+  timeout: number;           // request timeout in ms
+}
+
+type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
+
+export class CircuitBreaker {
+  private state: CircuitState = 'CLOSED';
+  private failures = 0;
+  private lastFailureTime = 0;
+
+  constructor(
+    private readonly name: string,
+    private readonly opts: CircuitBreakerOptions = { failureThreshold: 5, recoveryTimeMs: 60_000, timeout: 5000 },
+  ) {}
+
+  async call<T>(fn: () => Promise<T>): Promise<T> {
+    if (this.state === 'OPEN') {
+      if (Date.now() - this.lastFailureTime > this.opts.recoveryTimeMs) {
+        this.state = 'HALF_OPEN';
+      } else {
+        throw new ServerError(`Service ${this.name} is temporarily unavailable`);
+      }
+    }
+
+    try {
+      const result = await Promise.race([
+        fn(),
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout')), this.opts.timeout)),
+      ]);
+      // Success — reset
+      this.failures = 0;
+      this.state = 'CLOSED';
+      return result;
+    } catch (err) {
+      this.failures++;
+      this.lastFailureTime = Date.now();
+      if (this.failures >= this.opts.failureThreshold) {
+        this.state = 'OPEN';
+      }
+      throw err;
+    }
+  }
+}
+
+// One breaker per external dependency
+export const emailBreaker   = new CircuitBreaker('email-service');
+export const smsBreaker     = new CircuitBreaker('sms-service');
+export const paymentBreaker = new CircuitBreaker('payment-gateway', { failureThreshold: 3, recoveryTimeMs: 120_000, timeout: 10_000 });
+
+// Usage
+await emailBreaker.call(() => sendgrid.send(email));
+```
+
+---
+
+## Retry with exponential backoff + jitter
+
+For transient failures (network blips, DB connection spikes). Never retry on 4xx errors.
+
+```typescript
+// backend/src/lib/retry.ts
+interface RetryOptions {
+  maxAttempts: number;
+  baseDelayMs: number;
+  maxDelayMs: number;
+  retryOn?: (err: unknown) => boolean;
+}
+
+export async function withRetry<T>(fn: () => Promise<T>, opts: RetryOptions): Promise<T> {
+  const shouldRetry = opts.retryOn ?? (() => true);
+
+  for (let attempt = 1; attempt <= opts.maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      const isLast = attempt === opts.maxAttempts;
+      if (isLast || !shouldRetry(err)) throw err;
+
+      // Exponential backoff with jitter: 2^attempt * base ± 20% random
+      const expDelay = Math.min(opts.baseDelayMs * 2 ** attempt, opts.maxDelayMs);
+      const jitter = expDelay * 0.2 * (Math.random() - 0.5);
+      await new Promise((r) => setTimeout(r, expDelay + jitter));
+    }
+  }
+  throw new Error('unreachable');
+}
+
+// Usage — only retry on 5xx/network errors, not on 4xx client errors
+await withRetry(
+  () => fetch(webhookUrl, { method: 'POST', body: JSON.stringify(payload) }),
+  {
+    maxAttempts: 3,
+    baseDelayMs: 500,
+    maxDelayMs: 5000,
+    retryOn: (err) => !(err instanceof AppError && err.statusCode < 500),
+  },
+);
+```
+
+---
+
+## Dead-letter queue for failed jobs
+
+BullMQ automatically moves failed jobs to a dead-letter queue after `maxRetriesPerJob` exhausted.
+
+```typescript
+// backend/src/jobs/workers/email.worker.ts
+import { Worker } from 'bullmq';
+import { redis } from '../../lib/redis.js';
+import { logger } from '../../lib/logger.js';
+
+export const emailWorker = new Worker(
+  'email',
+  async (job) => {
+    // If this throws after all retries, job moves to failed set (the dead-letter queue)
+    await emailBreaker.call(() => sendEmail(job.data));
+  },
+  {
+    connection: redis,
+    concurrency: 5,
+  },
+);
+
+emailWorker.on('failed', (job, err) => {
+  // Alert on permanent failure (all retries exhausted)
+  logger.error('Email job permanently failed', {
+    jobId: job?.id,
+    jobName: job?.name,
+    data: job?.data,
+    error: err.message,
+    attempts: job?.attemptsMade,
+  });
+  // Optionally: push to a human-review queue, alert via Slack, etc.
+});
+
+// Queue config — retries are defined on the queue, not the worker
+// emailQueue.add('send', data, { attempts: 3, backoff: { type: 'exponential', delay: 1000 } });
+```

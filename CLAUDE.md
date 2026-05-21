@@ -142,6 +142,7 @@ Key URLs:
 | `agent-docs` | New module built, Swagger missing, README missing |
 | `agent-frontend-wiring` | New page/component, mutations added |
 | `agent-logic-analyzer` | New workflow, state machine, approval flow |
+| `agent-logic-creator` | DDD aggregates, domain modeling, business rules, saga design |
 | `agent-observability` | Logging gaps, health check issues |
 | `agent-performance` | N+1 detected, pagination missing, bundle bloat |
 | `agent-database` | Prisma schema changes, migrations |
@@ -163,7 +164,10 @@ Key URLs:
 | `skill-prisma-patterns.md` | org scoping, $transaction, optimistic lock, N+1 fix |
 | `skill-rtk-query-patterns.md` | API slice, providesTags, invalidatesTags, cache |
 | `skill-auth-patterns.md` | JWT flow, requirePermission, self-approval guard |
-| `skill-state-machine-patterns.md` | updateMany lock, terminal states, side effects |
+| `skill-state-machine-patterns.md` | updateMany lock, terminal states, transition table, domain events |
+| `skill-domain-modeling-patterns.md` | DDD aggregates, value objects, bounded contexts, domain events, repositories |
+| `skill-business-rules-patterns.md` | Specification pattern, Policy objects, rule tables, domain services |
+| `skill-workflow-orchestration-patterns.md` | Sagas, outbox, process managers, idempotency, choreography |
 | `skill-testing-patterns.md` | Service mocks, component tests, Playwright E2E |
 | `skill-ui-ux-checklist.md` | Monday Aniston design system — all tokens, component primitives, animation timings, 24-section conformance checklist |
 
@@ -190,7 +194,8 @@ Key URLs:
 | `skill-form-patterns.md` | Create/edit forms, multi-step, field array, Zod cross-field |
 | `skill-table-patterns.md` | DataTable, pagination, bulk action bar, mobile card fallback |
 | `skill-modal-patterns.md` | Modal/drawer, delete confirm, edit form reset, portal |
-| `skill-error-handling-patterns.md` | AppError hierarchy, Prisma mapper, global handler, frontend decoder |
+| `skill-error-handling-patterns.md` | AppError hierarchy, Result types, circuit breakers, retry with jitter, dead-letter queues |
+| `skill-keyboard-shortcuts-patterns.md` | useHotkeys, command palette, modal Escape, table arrow-key nav, focus trap |
 | `skill-search-filter-patterns.md` | URL-synced filters, debounced search, scoped list query |
 | `skill-chart-patterns.md` | Recharts line/bar/donut, KPI cards, date range picker, real-time |
 | `skill-infinite-scroll-patterns.md` | Cursor pagination, IntersectionObserver, RTK Query merge, virtual list |

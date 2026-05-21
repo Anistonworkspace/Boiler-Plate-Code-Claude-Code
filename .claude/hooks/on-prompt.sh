@@ -204,6 +204,39 @@ if echo "$P" | grep -qE "rate limit|rate.limit|throttle|too many requests|429|br
   RULES+=("rule-api.md")
 fi
 
+# ─ Domain modeling / DDD / Aggregates ────────────────────────────────────────
+if echo "$P" | grep -qE "domain|aggregate|value object|bounded context|ddd|entity|invariant|ubiquitous language|anti.corruption|domain event|repository pattern"; then
+  AGENTS+=("agent-logic-creator")
+  SKILLS+=("skill-domain-modeling-patterns.md" "skill-business-rules-patterns.md")
+  RULES+=("rule-mvc-architecture.md")
+fi
+
+# ─ Business rules / Specifications / Policies ────────────────────────────────
+if echo "$P" | grep -qE "business rule|specification|policy|rule table|validation rule|guard|precondition|eligibility|can.*apply|can.*approve"; then
+  AGENTS+=("agent-logic-creator")
+  SKILLS+=("skill-business-rules-patterns.md" "skill-state-machine-patterns.md")
+fi
+
+# ─ Saga / Orchestration / Outbox / Process manager ───────────────────────────
+if echo "$P" | grep -qE "saga|orchestration|choreography|outbox|process manager|compensation|rollback step|idempotency|durable|long.running|multi.step"; then
+  AGENTS+=("agent-logic-creator" "agent-logic-analyzer")
+  SKILLS+=("skill-workflow-orchestration-patterns.md" "skill-state-machine-patterns.md")
+  RULES+=("rule-state-machines.md")
+fi
+
+# ─ Keyboard shortcuts / Hotkeys / Command palette ────────────────────────────
+if echo "$P" | grep -qE "keyboard|shortcut|hotkey|command palette|ctrl\+k|cmd\+k|focus trap|accessibility|a11y|tab order|arrow key|escape key"; then
+  AGENTS+=("agent-ui-ux")
+  SKILLS+=("skill-keyboard-shortcuts-patterns.md" "skill-ui-ux-checklist.md")
+  RULES+=("rule-frontend.md")
+fi
+
+# ─ Result type / Circuit breaker / Retry ─────────────────────────────────────
+if echo "$P" | grep -qE "result type|circuit breaker|retry|backoff|dead.letter|jitter|fallback|resilience"; then
+  AGENTS+=("agent-logic-creator" "agent-debugger")
+  SKILLS+=("skill-error-handling-patterns.md" "skill-background-jobs-patterns.md")
+fi
+
 # ── Output dispatch context ───────────────────────────────────────────────────
 if [ ${#AGENTS[@]} -eq 0 ]; then
   echo "## Auto-context"

@@ -31,6 +31,11 @@ Claude Code injects the matching rows as context so the right agent fires automa
 | rate limit, throttle, 429, brute force, too many requests | `agent-api-security` | `skill-rate-limiting-patterns.md` |
 | naming, convention, camelCase, PascalCase, snake_case, folder structure | `agent-code-review` | `rule-naming-conventions.md` |
 | logging, console.log, winston, log level, structured log | `agent-observability` | `skill-monitoring-patterns.md` |
+| domain, aggregate, value object, bounded context, ddd, invariant, anti-corruption | `agent-logic-creator` | `skill-domain-modeling-patterns.md`, `skill-business-rules-patterns.md` |
+| business rule, specification, policy, rule table, eligibility, guard, precondition | `agent-logic-creator` | `skill-business-rules-patterns.md`, `skill-state-machine-patterns.md` |
+| saga, orchestration, outbox, process manager, compensation, choreography, idempotency, durable | `agent-logic-creator` → `agent-logic-analyzer` | `skill-workflow-orchestration-patterns.md`, `skill-state-machine-patterns.md` |
+| keyboard, shortcut, hotkey, command palette, ctrl+k, focus trap, a11y, tab order, escape key | `agent-ui-ux` | `skill-keyboard-shortcuts-patterns.md`, `skill-ui-ux-checklist.md` |
+| result type, circuit breaker, retry, backoff, dead-letter, jitter, resilience | `agent-logic-creator` | `skill-error-handling-patterns.md`, `skill-background-jobs-patterns.md` |
 
 ## Dispatch instruction template
 

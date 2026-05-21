@@ -1,6 +1,6 @@
 # Project State
 
-**Last updated:** 2026-05-20 (Phase 7 complete — 25 enterprise-level skill files added, CLAUDE.md skills table expanded to 32 skills)
+**Last updated:** 2026-05-21 (Logic Creator Pack added — agent-logic-creator + 6 new/upgraded skills, keyboard shortcuts skill, all dispatch patterns updated)
 
 ---
 

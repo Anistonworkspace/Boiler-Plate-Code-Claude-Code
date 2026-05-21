@@ -94,3 +94,87 @@ const canCancel = leave.status === 'APPROVED' && hasPermission(user.role, 'LEAVE
 <Button disabled={!canApprove} onClick={handleApprove}>Approve</Button>
 <Button disabled={!canCancel} variant="destructive" onClick={handleCancel}>Cancel</Button>
 ```
+
+---
+
+## Transition table (document every workflow this way)
+
+Always write this before implementing any state machine. Every row must have a handler.
+
+```
+| Current State | Event          | Guard                          | Next State | Side Effects                        |
+|---------------|----------------|--------------------------------|------------|-------------------------------------|
+| DRAFT         | SUBMIT         | employee owns it               | SUBMITTED  | notify manager, audit log           |
+| SUBMITTED     | APPROVE        | approverId ≠ requesterId       | APPROVED   | notify employee, deduct balance     |
+| SUBMITTED     | REJECT         | approverId ≠ requesterId       | REJECTED   | notify employee (terminal)          |
+| APPROVED      | CANCEL         | actor is ADMIN                 | CANCELLED  | restore balance, notify employee    |
+| REJECTED      | —              | terminal state                 | —          | cannot leave without re-open        |
+| CANCELLED     | —              | terminal state                 | —          | cannot leave without re-open        |
+```
+
+---
+
+## Domain event on every transition (DDD style)
+
+Emit a typed domain event after every state change. Other modules react via the event dispatcher.
+
+```typescript
+// backend/src/modules/leave/domain/leave-events.ts
+export type LeaveEvent =
+  | { type: 'SUBMITTED';  leaveId: string; employeeId: string; managerId: string }
+  | { type: 'APPROVED';   leaveId: string; approverId: string; durationDays: number }
+  | { type: 'REJECTED';   leaveId: string; approverId: string; reason: string }
+  | { type: 'CANCELLED';  leaveId: string; cancelledBy: string };
+
+// In the service — emit after transaction commits
+const result = await prisma.$transaction(async (tx) => {
+  const updated = await tx.leave.updateMany({
+    where: { id, status: 'SUBMITTED' },
+    data: { status: 'APPROVED', approverId: actor.id },
+  });
+  if (updated.count === 0) throw new ConflictError('Leave was already processed');
+  await auditLogger.log(tx, { action: 'LEAVE_APPROVED', entity: 'Leave', entityId: id, actorId: actor.id, organizationId: actor.organizationId });
+  return updated;
+});
+
+// Domain event after transaction — side effects are decoupled
+const event: LeaveEvent = { type: 'APPROVED', leaveId: id, approverId: actor.id, durationDays: leave.durationDays };
+io.to(`org:${actor.organizationId}`).emit('domain:LeaveApproved', event);
+await notificationQueue.add('leave-approved', event);
+```
+
+---
+
+## Aggregate-owned state machine
+
+For complex entities, own the state machine inside the aggregate (see `skill-domain-modeling-patterns.md`).
+The aggregate enforces all guards — the service just calls methods and dispatches events.
+
+```typescript
+// Service delegates transition to aggregate, then persists + dispatches
+const agg = await leaveRequestRepo.findById(id, actor.organizationId);
+if (!agg) throw new NotFoundError('Leave request not found');
+
+agg.approve(actor.id); // throws ConflictError or ForbiddenError internally
+
+await prisma.$transaction(async (tx) => {
+  await leaveRequestRepo.save(agg, tx);
+  await auditLogger.log(tx, { action: 'LEAVE_APPROVED', entity: 'LeaveRequest', entityId: id, actorId: actor.id, organizationId: actor.organizationId });
+});
+
+const events = agg.pullDomainEvents();
+await DomainEventDispatcher.dispatch(events, actor.organizationId);
+```
+
+---
+
+## State machine completeness checklist
+
+- [ ] Every enum value appears in the transition table
+- [ ] Every transition has an explicit guard
+- [ ] Terminal states throw on any transition attempt
+- [ ] Optimistic lock (updateMany with current state) on every write transition
+- [ ] Self-approval checked on every approval transition
+- [ ] Domain event emitted after every successful transition
+- [ ] Frontend buttons disabled for impossible transitions
+- [ ] Audit log entry written inside the transaction
