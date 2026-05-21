@@ -40,6 +40,7 @@
 | `agent-docs` | Write and maintain documentation |
 | `agent-frontend-wiring` | Dead UI, broken mutations, API mismatch |
 | `agent-logic-analyzer` | Business logic bugs, race conditions |
+| `agent-logic-creator` | DDD aggregates, domain modeling, sagas, business rules |
 | `agent-observability` | Logging, health checks, audit trails |
 | `agent-performance` | N+1 queries, missing indexes, slow endpoints |
 | `agent-database` | Prisma schema, migrations, enum consistency |
@@ -48,6 +49,7 @@
 | `agent-security` | Full security audit (OWASP Top 10) |
 | `agent-test-writer` | Write Vitest unit tests and Playwright E2E tests |
 | `agent-ui-ux` | Mobile layout, PWA, accessibility audit |
+| `agent-electron` | Electron desktop, IPC, auto-update, NSIS installer |
 
 ## IMPORTANT — No Worktrees
 NEVER use isolation: "worktree". ALL changes must be made directly in the main working tree.

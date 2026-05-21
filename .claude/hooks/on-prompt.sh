@@ -238,13 +238,8 @@ if echo "$P" | grep -qE "result type|circuit breaker|retry|backoff|dead.letter|j
 fi
 
 # ── Output dispatch context ───────────────────────────────────────────────────
+# No keywords matched — rules are already in CLAUDE.md system context, no extra output needed
 if [ ${#AGENTS[@]} -eq 0 ]; then
-  echo "## Auto-context"
-  echo "No specific agent triggered. Core rules always apply:"
-  echo "- MVC: Controller thin → Service thick (rule-mvc-architecture.md)"
-  echo "- Every Prisma query: organizationId + deletedAt:null (rule-security-rbac.md)"
-  echo "- Response envelope: { success, data, meta } (rule-api.md)"
-  echo "- No hardcoded colors — CSS variables only (skill-ui-ux-checklist.md)"
   exit 0
 fi
 
@@ -268,8 +263,6 @@ if [ ${#RULES_UNIQUE[@]} -gt 0 ]; then
   for r in "${RULES_UNIQUE[@]}"; do echo "- $r"; done
   echo ""
 fi
-echo "**Instructions:** Before writing any code, read the agent files listed above."
-echo "Follow their checklists completely. Report findings using their output format."
-echo "The user does not need to ask — these agents fire automatically for this task type."
+echo "Apply these agents and patterns to the current task."
 
 exit 0

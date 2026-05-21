@@ -59,9 +59,9 @@ When wrapping up a task:
 - Backend modules: 1 (auth)
 - Frontend features: 2 (auth, dashboard)
 - Prisma models: 7 (Organization, User, RefreshToken, Department, Designation, Employee, AuditLog)
-- ADRs recorded: 7 (ADR-0001 through ADR-0007)
-- Skills: 39 (in .claude/skills/) — includes Logic Creator Pack + keyboard shortcuts
+- ADRs recorded: 8 (ADR-0001 through ADR-0008 — ADR-0002 superseded by ADR-0008)
+- Skills: 37 (in .claude/skills/) — includes Logic Creator Pack + keyboard shortcuts
 - Rules: 17 (in .claude/rules/)
-- Agents: 19 (in .claude/agents/) — includes agent-logic-creator
+- Agents: 19 (in .claude/agents/) — includes agent-electron + agent-logic-creator
 - Open plans in `_active/`: 0
 - Active file locks: 0

@@ -1,8 +1,13 @@
 # ADR 0002 — Glassmorphism UI Style with Sora / DM Sans / JetBrains Mono
 
-**Status:** Accepted
+**Status:** Superseded
 **Date:** 2026-05-17
-**Supersedes:** —
+**Superseded by:** ADR-0008 — Monday Aniston Design System (2026-05-21)
+
+> **DO NOT FOLLOW THIS ADR.** The glassmorphism system (indigo-600, Sora, DM Sans) was replaced
+> by the Monday Aniston design system (primary #0073ea, Poppins, Figtree) before any app was built.
+> Read `memory/decisions/ADR-0008-monday-aniston-design-system.md` for the current system.
+> Read `skill-ui-ux-checklist.md` for all current token values.
 
 ## Context
 

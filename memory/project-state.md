@@ -26,9 +26,9 @@
 - ✅ `hooks/on-stop.sh` — writes session stub to memory/sessions/, prints checklist
 - ✅ `hooks/lint-on-save.sh` — reminds about schema/enum sync, auth sensitivity
 - ✅ `hooks/pre-command.sh` — blocks dangerous ops, reminds about Prisma/memory
-- ✅ Rules (15 files, all prefixed `rule-`): rule-mvc-architecture (NEW), rule-api, rule-backend, rule-database, rule-frontend, rule-security-rbac, rule-git-safety, rule-secrets-policy, rule-database-migrations, rule-state-machines, rule-testing-standards, rule-bug-fix-process, rule-audit-standards, rule-logic-analysis, rule-memory-system
-- ✅ Agents (17 files, all prefixed `agent-`, model: sonnet — all rewritten enterprise/god-level)
-- ✅ Skills (32 files in `.claude/skills/`): 7 original + 25 enterprise-level additions
+- ✅ Rules (17 files, all prefixed `rule-`): rule-mvc-architecture, rule-api, rule-backend, rule-database, rule-frontend, rule-security-rbac, rule-git-safety, rule-secrets-policy, rule-database-migrations, rule-state-machines, rule-testing-standards, rule-bug-fix-process, rule-audit-standards, rule-logic-analysis, rule-memory-system, rule-naming-conventions, rule-logging-standards
+- ✅ Agents (19 files, all prefixed `agent-`, model: claude-opus-4-7 — all enterprise/god-level)
+- ✅ Skills (37 files in `.claude/skills/`): 7 original + 30 enterprise-level additions (includes Logic Creator Pack + keyboard shortcuts)
   - Core: skill-mvc-patterns, skill-prisma-patterns, skill-rtk-query-patterns, skill-auth-patterns, skill-state-machine-patterns, skill-testing-patterns, skill-ui-ux-checklist
   - Data & Comms: skill-socket-patterns, skill-background-jobs-patterns, skill-notification-patterns, skill-caching-patterns, skill-webhook-patterns
   - Security: skill-encryption-patterns, skill-audit-log-patterns, skill-rbac-advanced-patterns, skill-input-sanitization-patterns

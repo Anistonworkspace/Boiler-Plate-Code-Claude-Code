@@ -1,7 +1,8 @@
 # Auto-Dispatch Table
 
-This file is read by the `on-prompt.sh` hook before every user message.
-Claude Code injects the matching rows as context so the right agent fires automatically.
+This is a **human-readable reference table** documenting the dispatch logic.
+The actual runtime dispatch is hardcoded in `.claude/hooks/on-prompt.sh` — edit that file to change what fires.
+This file does NOT affect runtime behavior. Keep it in sync with on-prompt.sh manually.
 
 ## Keyword → Agent → Skills
 
