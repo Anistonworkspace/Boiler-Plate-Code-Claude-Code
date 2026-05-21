@@ -25,6 +25,18 @@ const electronAPI = {
   onUpdateDownloaded: (cb: () => void) => { ipcRenderer.on('update:downloaded', cb); },
   installUpdate: (): Promise<void> =>
     ipcRenderer.invoke('update:install'),
+
+  // Native menu shortcut IPC — main process sends these when an accelerator fires
+  onShortcutNavigate: (cb: (route: string) => void) => {
+    ipcRenderer.on('shortcut:navigate', (_e, route: string) => cb(route));
+  },
+  onShortcutAction: (cb: (action: string) => void) => {
+    ipcRenderer.on('shortcut:action', (_e, action: string) => cb(action));
+  },
+  removeShortcutListeners: () => {
+    ipcRenderer.removeAllListeners('shortcut:navigate');
+    ipcRenderer.removeAllListeners('shortcut:action');
+  },
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);

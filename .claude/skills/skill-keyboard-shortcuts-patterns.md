@@ -368,20 +368,278 @@ focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0073ea] foc
 
 ---
 
+## Electron desktop shortcut integration
+
+When the app runs as a Windows EXE (agent-desktop/), shortcuts work at two layers:
+1. **Native menu accelerators** — defined in `main.ts` via `Menu.buildFromTemplate`, fire IPC events
+2. **Web hotkeys** — `react-hotkeys-hook` in the renderer, same as the browser
+
+The renderer must detect which environment it's in so shortcuts don't double-fire.
+
+---
+
+### Environment detection helper (use everywhere)
+
+```typescript
+// frontend/src/lib/platform.ts
+export const isElectron = typeof window !== 'undefined' && !!window.electronAPI;
+export const isMac     = navigator.platform.toLowerCase().includes('mac');
+
+// Use CmdOrCtrl label correctly in UI hints
+export const modKey = isMac ? '⌘' : 'Ctrl';
+```
+
+---
+
+### Electron native menu with accelerators (agent-desktop/src/main.ts)
+
+Define the native application menu with accelerators. When a user presses the shortcut, Electron fires an IPC event to the renderer — the renderer handles navigation/actions via Redux.
+
+```typescript
+// agent-desktop/src/menuTemplate.ts
+import { Menu, app, BrowserWindow } from 'electron';
+
+export function buildMenu(mainWindow: BrowserWindow): void {
+  const send = (channel: string, payload?: unknown) =>
+    mainWindow.webContents.send(channel, payload);
+
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: app.name,
+      submenu: [
+        { label: 'About', role: 'about' },
+        { type: 'separator' },
+        { label: 'Quit',  role: 'quit', accelerator: 'CmdOrCtrl+Q' },
+      ],
+    },
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New…',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => send('shortcut:action', 'create-new'),
+        },
+        {
+          label: 'Export…',
+          accelerator: 'CmdOrCtrl+E',
+          click: () => send('shortcut:action', 'export'),
+        },
+      ],
+    },
+    {
+      label: 'Go',
+      submenu: [
+        { label: 'Dashboard',  accelerator: 'CmdOrCtrl+1', click: () => send('shortcut:navigate', '/dashboard') },
+        { label: 'Employees',  accelerator: 'CmdOrCtrl+2', click: () => send('shortcut:navigate', '/employees') },
+        { label: 'Settings',   accelerator: 'CmdOrCtrl+,', click: () => send('shortcut:navigate', '/settings') },
+      ],
+    },
+    {
+      label: 'View',
+      submenu: [
+        { label: 'Command Palette', accelerator: 'CmdOrCtrl+K', click: () => send('shortcut:action', 'command-palette') },
+        { label: 'Keyboard Shortcuts', accelerator: 'CmdOrCtrl+/', click: () => send('shortcut:action', 'show-shortcuts') },
+        { type: 'separator' },
+        { label: 'Reload',      role: 'reload',      accelerator: 'CmdOrCtrl+R' },
+        { label: 'Force Reload', role: 'forceReload', accelerator: 'CmdOrCtrl+Shift+R' },
+        { label: 'Dev Tools',   role: 'toggleDevTools', accelerator: 'F12' },
+      ],
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' }, { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectAll' },
+      ],
+    },
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+```
+
+Call it from `main.ts`:
+```typescript
+// inside app.whenReady().then(...)
+buildMenu(mainWindow);
+```
+
+---
+
+### Preload — expose shortcut IPC channels
+
+```typescript
+// agent-desktop/src/preload.ts — add to existing contextBridge
+contextBridge.exposeInMainWorld('electronAPI', {
+  // ... existing methods ...
+
+  // Menu shortcut events → renderer can listen to these
+  onShortcutNavigate: (cb: (route: string) => void) =>
+    ipcRenderer.on('shortcut:navigate', (_e, route) => cb(route)),
+  onShortcutAction: (cb: (action: string) => void) =>
+    ipcRenderer.on('shortcut:action', (_e, action) => cb(action)),
+
+  // Cleanup (call in useEffect return)
+  removeShortcutListeners: () => {
+    ipcRenderer.removeAllListeners('shortcut:navigate');
+    ipcRenderer.removeAllListeners('shortcut:action');
+  },
+});
+```
+
+---
+
+### Renderer — useElectronShortcuts hook
+
+```typescript
+// frontend/src/hooks/useElectronShortcuts.ts
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@/store';
+import { openCommandPalette, openKeyboardHelp, openCreateModal } from '@/store/uiSlice';
+import { isElectron } from '@/lib/platform';
+
+export function useElectronShortcuts() {
+  const navigate   = useNavigate();
+  const dispatch   = useAppDispatch();
+
+  useEffect(() => {
+    if (!isElectron || !window.electronAPI) return;
+
+    // Navigation events from native menu
+    window.electronAPI.onShortcutNavigate((route) => navigate(route));
+
+    // Action events from native menu
+    window.electronAPI.onShortcutAction((action) => {
+      if (action === 'command-palette') dispatch(openCommandPalette());
+      if (action === 'show-shortcuts')  dispatch(openKeyboardHelp());
+      if (action === 'create-new')      dispatch(openCreateModal());
+    });
+
+    return () => window.electronAPI?.removeShortcutListeners();
+  }, [navigate, dispatch]);
+}
+```
+
+---
+
+### useGlobalShortcuts — skip when Electron handles them natively
+
+```typescript
+// frontend/src/hooks/useGlobalShortcuts.ts
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@/store';
+import { openCommandPalette, openKeyboardHelp, openCreateModal, toggleSearchBar } from '@/store/uiSlice';
+import { isElectron } from '@/lib/platform';
+
+export function useGlobalShortcuts() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // In Electron, Ctrl+K / Ctrl+N are already handled by the native menu.
+  // Only register them as web hotkeys when NOT in Electron, to avoid double-fire.
+  const skipNative = isElectron;
+
+  useHotkeys('meta+k, ctrl+k', (e) => {
+    e.preventDefault();
+    dispatch(openCommandPalette());
+  }, { enableOnFormTags: false, enabled: !skipNative });
+
+  useHotkeys('meta+n, ctrl+n', (e) => {
+    e.preventDefault();
+    dispatch(openCreateModal());
+  }, { enableOnFormTags: false, enabled: !skipNative });
+
+  // G-chord navigation — safe in both web and Electron (not in native menu)
+  useHotkeys('g d', () => navigate('/dashboard'),   { enableOnFormTags: false });
+  useHotkeys('g e', () => navigate('/employees'),   { enableOnFormTags: false });
+  useHotkeys('g s', () => navigate('/settings'),    { enableOnFormTags: false });
+  useHotkeys('g p', () => navigate('/profile'),     { enableOnFormTags: false });
+
+  useHotkeys('meta+/, ctrl+/', (e) => { e.preventDefault(); dispatch(toggleSearchBar()); },
+    { enableOnFormTags: false, enabled: !skipNative });
+
+  useHotkeys('shift+?', () => dispatch(openKeyboardHelp()),
+    { enableOnFormTags: false });
+}
+```
+
+---
+
+### Mount both hooks at app root
+
+```typescript
+// frontend/src/App.tsx
+import { useGlobalShortcuts }   from '@/hooks/useGlobalShortcuts';
+import { useElectronShortcuts } from '@/hooks/useElectronShortcuts';
+
+export function AppShell() {
+  useGlobalShortcuts();    // web browser shortcuts
+  useElectronShortcuts();  // Electron native menu IPC events (no-op in browser)
+  return <Outlet />;
+}
+```
+
+---
+
+### Global system shortcut (works even when app is minimized)
+
+Use sparingly — system shortcuts conflict with other apps. Only register for critical "bring app to front" use cases.
+
+```typescript
+// agent-desktop/src/main.ts — inside app.whenReady().then(...)
+import { globalShortcut } from 'electron';
+
+// Ctrl+Shift+B — bring the app window to front from anywhere on the OS
+app.whenReady().then(() => {
+  globalShortcut.register('CmdOrCtrl+Shift+B', () => {
+    mainWindow?.show();
+    mainWindow?.focus();
+  });
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
+```
+
+---
+
 ## Quick reference — all standard shortcuts in this boilerplate
 
-| Shortcut | Action | Scope |
-|----------|--------|-------|
-| `Ctrl+K` / `Cmd+K` | Open command palette | Global |
-| `?` | Open keyboard shortcuts help | Global (not in forms) |
-| `Ctrl+N` | Open create modal | Global |
-| `Ctrl+/` | Focus search bar | Global |
-| `G D` | Navigate to Dashboard | Global |
-| `G E` | Navigate to Employees | Global |
-| `G L` | Navigate to Leaves | Global |
-| `Esc` | Close modal / cancel action | Modal/drawer |
-| `Ctrl+Enter` | Submit form | Forms |
-| `↑ ↓` | Navigate table rows | Data tables |
-| `Enter` | Open selected row | Data tables |
-| `Delete` | Delete selected row | Data tables |
-| `Home` / `End` | First / last row | Data tables |
+| Shortcut | Action | Web | Electron EXE |
+|----------|--------|-----|--------------|
+| `Ctrl+K` / `Cmd+K` | Open command palette | `react-hotkeys-hook` | Native menu accelerator → IPC |
+| `?` | Open keyboard shortcuts help | `react-hotkeys-hook` | `react-hotkeys-hook` (no native menu) |
+| `Ctrl+N` | Create new | `react-hotkeys-hook` | Native menu accelerator → IPC |
+| `Ctrl+/` | Focus search | `react-hotkeys-hook` | Native menu accelerator → IPC |
+| `Ctrl+1/2/3` | Navigate sections | — | Native menu "Go" submenu → IPC |
+| `Ctrl+,` | Open settings | — | Native menu accelerator → IPC |
+| `Ctrl+Q` | Quit app | — | Native menu `role: 'quit'` |
+| `Ctrl+Shift+B` | Bring app to front | — | `globalShortcut` (OS-level) |
+| `G D` | Go to Dashboard | `react-hotkeys-hook` | `react-hotkeys-hook` |
+| `G E` | Go to Employees | `react-hotkeys-hook` | `react-hotkeys-hook` |
+| `Esc` | Close modal / Cancel | `useModalKeyboard` | `useModalKeyboard` |
+| `Ctrl+Enter` | Submit form | `react-hotkeys-hook` | `react-hotkeys-hook` |
+| `↑ ↓` | Navigate table rows | `useTableKeyboard` | `useTableKeyboard` |
+| `Enter` | Open selected row | `useTableKeyboard` | `useTableKeyboard` |
+| `Delete` | Delete selected row | `useTableKeyboard` | `useTableKeyboard` |
+| `Home` / `End` | First / last row | `useTableKeyboard` | `useTableKeyboard` |
+| `F12` | Toggle DevTools | — | Native menu (dev only) |
+
+---
+
+## Checklist
+
+- [ ] `isElectron` guard in `useGlobalShortcuts` — prevents double-fire for shortcuts handled by native menu
+- [ ] All native menu accelerators send IPC events — never navigate directly (renderer owns routing)
+- [ ] `onShortcutNavigate` / `onShortcutAction` listeners cleaned up in `useEffect` return
+- [ ] `globalShortcut.unregisterAll()` called on `will-quit`
+- [ ] No `Ctrl+W`, `Ctrl+T`, `Ctrl+R` as custom shortcuts — these have browser/OS meanings
+- [ ] `enableOnFormTags: false` on all navigation hotkeys
+- [ ] `enableOnFormTags: true` only on `Ctrl+Enter` (form submit)
+- [ ] Focus returns to trigger element after modal closes
+- [ ] All modals: `Escape` closes, Tab cycles within, focus trapped

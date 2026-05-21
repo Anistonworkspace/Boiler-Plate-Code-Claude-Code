@@ -23,9 +23,14 @@ interface ElectronAPI {
   writeFile: (filePath: string, data: string) => Promise<{ success: boolean; path: string }>;
   openExternal: (url: string) => Promise<void>;
   showNotification: (title: string, body: string) => Promise<void>;
+  // Auto-update
   onUpdateAvailable: (cb: () => void) => void;
   onUpdateDownloaded: (cb: () => void) => void;
   installUpdate: () => Promise<void>;
+  // Native menu shortcut IPC (see skill-keyboard-shortcuts-patterns.md)
+  onShortcutNavigate: (cb: (route: string) => void) => void;
+  onShortcutAction: (cb: (action: string) => void) => void;
+  removeShortcutListeners: () => void;
 }
 
 declare global {
