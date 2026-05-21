@@ -22,12 +22,15 @@ Claude Code injects the matching rows as context so the right agent fires automa
 | socket, realtime, websocket, notification, push, bell | `agent-frontend-wiring` | `skill-socket-patterns.md`, `skill-notification-patterns.md` |
 | upload, file, image, photo, csv, import, export, pdf, excel | `agent-planner` | `skill-file-upload-patterns.md`, `skill-report-export-patterns.md`, `skill-bulk-operations-patterns.md` |
 | pwa, offline, service worker, install prompt, workbox, capacitor, android, ios, mobile app | `agent-ui-ux` | `skill-pwa-patterns.md`, `skill-capacitor-patterns.md` |
-| electron, desktop, tray, windows app | `agent-devops` | `skill-electron-patterns.md` |
+| electron, desktop, tray, windows app, ipc, nsis, installer | `agent-electron` | `skill-electron-patterns.md` |
 | chart, graph, dashboard, kpi, stats, analytics | `agent-ui-ux` | `skill-chart-patterns.md` |
 | webhook, integration, hmac, outgoing, incoming | `agent-api-security` | `skill-webhook-patterns.md` |
 | i18n, locale, language, translation, hindi, arabic, rtl | `agent-ui-ux` | `skill-i18n-patterns.md` |
 | multi-tenant, org, organization, subdomain, plan, subscription | `agent-planner` | `skill-multitenancy-patterns.md` |
 | bulk, batch, csv import, mass update, multiple select | `agent-planner` | `skill-bulk-operations-patterns.md` |
+| rate limit, throttle, 429, brute force, too many requests | `agent-api-security` | `skill-rate-limiting-patterns.md` |
+| naming, convention, camelCase, PascalCase, snake_case, folder structure | `agent-code-review` | `rule-naming-conventions.md` |
+| logging, console.log, winston, log level, structured log | `agent-observability` | `skill-monitoring-patterns.md` |
 
 ## Dispatch instruction template
 

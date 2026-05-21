@@ -70,6 +70,11 @@ until docker exec boilerplate_redis redis-cli ping &>/dev/null; do
 done
 ok "Redis is ready"
 
+# ── Claude Code hooks — ensure executable ────────────────────────────────────
+info "Making Claude Code hooks executable..."
+chmod +x .claude/hooks/*.sh 2>/dev/null || true
+ok "Hooks are executable"
+
 # ── npm install ──────────────────────────────────────────────────────────────
 info "Installing npm dependencies..."
 npm install --silent

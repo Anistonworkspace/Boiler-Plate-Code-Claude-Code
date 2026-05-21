@@ -59,6 +59,9 @@ When wrapping up a task:
 - Backend modules: 1 (auth)
 - Frontend features: 2 (auth, dashboard)
 - Prisma models: 7 (Organization, User, RefreshToken, Department, Designation, Employee, AuditLog)
-- ADRs recorded: 3
+- ADRs recorded: 7 (ADR-0001 through ADR-0007)
+- Skills: 33 (in .claude/skills/)
+- Rules: 17 (in .claude/rules/)
+- Agents: 18 (in .claude/agents/)
 - Open plans in `_active/`: 0
 - Active file locks: 0

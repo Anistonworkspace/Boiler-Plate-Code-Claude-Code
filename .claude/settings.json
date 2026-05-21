@@ -40,13 +40,14 @@
       "Bash(npm run *)", "Bash(npx *)", "Bash(node *)",
       "Bash(git diff *)", "Bash(git log *)", "Bash(git status)",
       "Bash(git add *)", "Bash(git commit *)", "Bash(git checkout *)",
-      "Bash(git branch *)", "Bash(git pull *)", "Bash(git push *)",
+      "Bash(git branch *)", "Bash(git pull *)",
       "Bash(cd * && *)", "Bash(ls *)", "Bash(cat *)", "Bash(mkdir *)",
       "Bash(cp *)", "Bash(mv *)", "Bash(touch *)", "Bash(echo *)",
       "Bash(chmod *)", "Bash(grep *)", "Bash(find *)", "Bash(rm *)",
       "Bash(docker *)", "Bash(docker compose *)", "Bash(docker-compose *)",
       "Bash(curl *)", "Bash(wget *)", "Bash(pm2 *)",
       "Bash(ssh *)", "Bash(scp *)", "Bash(kill *)", "Bash(lsof *)", "Bash(ps *)",
+      "Bash(sed *)", "Bash(awk *)", "Bash(sort *)", "Bash(head *)", "Bash(tail *)",
       "Read(**)", "Write(**)", "Edit(**)", "MultiEdit(**)", "Glob(**)",
       "mcp__playwright__browser_navigate", "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_snapshot", "mcp__playwright__browser_click",
@@ -60,29 +61,38 @@
       "mcp__playwright__browser_handle_dialog", "mcp__playwright__browser_file_upload"
     ],
     "deny": [
-      "Bash(rm -rf /)", "Bash(rm -rf /*)",
-      "Bash(curl * | bash)", "Bash(wget * | bash)",
-      "Read(.env.production)", "Bash(git worktree add *)"
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)",
+      "Bash(git push * --force *)",
+      "Bash(git push *--force*)",
+      "Bash(git worktree add *)",
+      "Read(.env.production)",
+      "Write(.env.production)",
+      "Write(.env.local)",
+      "Bash(echo * > .env*)",
+      "Bash(npx prisma db push --*prod*)"
     ]
   },
-  "model": "sonnet",
+  "model": "claude-opus-4-7",
   "autoMemoryEnabled": true,
   "includeGitInstructions": true,
   "respectGitignore": true,
   "hooks": {
     "UserPromptSubmit": [{
-      "hooks": [{ "type": "command", "command": ".claude/hooks/on-prompt.sh" }]
+      "hooks": [{ "type": "command", "command": "bash .claude/hooks/on-prompt.sh" }]
     }],
     "PreToolUse": [{
       "matcher": "Bash",
-      "hooks": [{ "type": "command", "command": ".claude/hooks/pre-command.sh" }]
+      "hooks": [{ "type": "command", "command": "bash .claude/hooks/pre-command.sh" }]
     }],
     "PostToolUse": [{
       "matcher": "Edit|Write|MultiEdit",
-      "hooks": [{ "type": "command", "command": ".claude/hooks/lint-on-save.sh" }]
+      "hooks": [{ "type": "command", "command": "bash .claude/hooks/lint-on-save.sh" }]
     }],
     "Stop": [{
-      "hooks": [{ "type": "command", "command": ".claude/hooks/on-stop.sh" }]
+      "hooks": [{ "type": "command", "command": "bash .claude/hooks/on-stop.sh" }]
     }]
   }
 }

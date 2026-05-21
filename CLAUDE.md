@@ -150,6 +150,7 @@ Key URLs:
 | `agent-security` | `/security-scan`, auth changes, file uploads |
 | `agent-test-writer` | `/add-tests`, new module with no tests |
 | `agent-ui-ux` | New page/component, mobile layout issues |
+| `agent-electron` | Electron desktop, IPC handlers, auto-update, NSIS installer |
 
 ---
 
@@ -206,6 +207,7 @@ Key URLs:
 | `skill-capacitor-patterns.md` | Android/iOS build, FCM push, camera, deep links, safe area |
 | `skill-electron-patterns.md` | IPC, auto-update, tray, file dialogs, NSIS installer |
 | `skill-i18n-patterns.md` | i18next, en-IN locale, plurals, date/currency format, RTL |
+| `skill-rate-limiting-patterns.md` | Redis-backed rate limit, account lockout, 429 frontend handling |
 
 ---
 
@@ -228,6 +230,8 @@ Key URLs:
 | `rule-secrets-policy.md` | No .env commits, no APK in git |
 | `rule-git-safety.md` | No force-push, no worktrees |
 | `rule-memory-system.md` | Mandatory start/end sequences |
+| `rule-naming-conventions.md` | camelCase/PascalCase/SCREAMING_SNAKE, file naming, route naming |
+| `rule-logging-standards.md` | No console.log, structured JSON logs, requestId required, log levels |
 
 ---
 
