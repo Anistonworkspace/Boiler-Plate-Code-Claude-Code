@@ -1,7 +1,7 @@
 ---
 name: agent-security
 description: Full OWASP Top 10 security audit covering authentication, JWT handling, encryption of sensitive data, file upload safety, CORS/CSP, secrets policy, audit logs, RBAC completeness, and injection prevention.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

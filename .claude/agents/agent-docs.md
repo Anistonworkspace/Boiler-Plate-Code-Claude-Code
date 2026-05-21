@@ -1,7 +1,7 @@
 ---
 name: agent-docs
 description: Writes and maintains project documentation — Swagger JSDoc, module READMEs, ADRs, and inline code comments. Focus is always on WHY and HOW TO USE, never on what the code does.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

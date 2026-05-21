@@ -1,7 +1,7 @@
 ---
 name: agent-frontend-wiring
 description: Finds dead UI elements, unwired buttons, stale RTK Query cache, broken modals, unhandled mutation states, API mismatches between frontend calls and backend routes, and mobile overflow.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

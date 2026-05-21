@@ -1,7 +1,7 @@
 ---
 name: agent-database
 description: Audits Prisma schema correctness, migration safety, enum sync between schema and shared/enums.ts, index coverage, sensitive field naming, and production migration readiness.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

@@ -1,7 +1,7 @@
 ---
 name: agent-test-writer
 description: Writes actual runnable Vitest unit/integration tests and Playwright E2E tests. No placeholders — real mocks, real assertions, real coverage. Run after /add-tests or when building a new module.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

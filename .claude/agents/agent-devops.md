@@ -1,7 +1,7 @@
 ---
 name: agent-devops
 description: Audits and fixes CI/CD pipelines, Docker Compose, deploy scripts, database migrations in production, secrets handling, release artifacts, rollback plans, and PM2 config. Run before any production deploy.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

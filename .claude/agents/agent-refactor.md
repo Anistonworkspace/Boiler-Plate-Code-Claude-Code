@@ -1,7 +1,7 @@
 ---
 name: agent-refactor
 description: Identifies and eliminates code duplication without changing behavior. Extracts shared patterns only when 3+ identical instances exist. Always runs existing tests after to verify no regressions.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

@@ -1,7 +1,7 @@
 ---
 name: agent-logic-analyzer
 description: Traces complete UI→DB→socket workflows to find logic gaps, missing state transitions, race conditions, self-approval vulnerabilities, and unhandled edge cases. Use /trace or run as part of /audit.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

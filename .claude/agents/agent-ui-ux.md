@@ -1,7 +1,7 @@
 ---
 name: agent-ui-ux
 description: General UI/UX auditor and design-system guardian. Learns the project's design system from actual code, prevents random redesigns, and gives minimal implementation-ready guidance. Pair with skill-ui-ux-checklist.md for token-level conformance.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

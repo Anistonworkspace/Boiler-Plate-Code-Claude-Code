@@ -1,7 +1,7 @@
 ---
 name: agent-performance
 description: Finds N+1 Prisma queries, missing database indexes, unpaginated list endpoints, unnecessary re-fetches in RTK Query, large frontend bundle issues, and suboptimal Socket.io usage.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

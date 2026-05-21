@@ -1,7 +1,7 @@
 ---
 name: agent-memory
 description: Memory system coordinator. Run at session START to load all context and at session END to save progress. Also run when you suspect stale state, before picking up a handoff, or when switching between tasks.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

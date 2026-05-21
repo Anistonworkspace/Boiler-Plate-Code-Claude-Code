@@ -1,7 +1,7 @@
 ---
 name: agent-planner
 description: Writes a complete plan file in memory/plans/_active/ before any non-trivial change. Use before any multi-file change, schema migration, new module, bug fix, or refactor that touches more than one file.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

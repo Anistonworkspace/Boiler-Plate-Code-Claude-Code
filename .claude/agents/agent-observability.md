@@ -1,7 +1,7 @@
 ---
 name: agent-observability
 description: Audits structured logging, error correlation, audit trail completeness, health check depth, BullMQ failure handling, error sanitization, and production triage readiness.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

@@ -1,7 +1,7 @@
 ---
 name: agent-code-review
 description: Reviews code changes against all project rules before commit or merge. Checks MVC architecture, conventions, security, database patterns, tests, and state machines.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

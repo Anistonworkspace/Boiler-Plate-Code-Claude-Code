@@ -1,7 +1,7 @@
 ---
 name: agent-testing
 description: Identifies test gaps, builds prioritized test strategy, checks RBAC matrix coverage, and verifies coverage meets the 80%/70% thresholds. Run after building any new module.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

@@ -1,7 +1,7 @@
 ---
 name: agent-debugger
 description: Diagnoses and fixes errors in the development environment. Use when npm run dev fails, tests crash, TypeScript errors appear, Docker won't start, or the app behaves unexpectedly.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions

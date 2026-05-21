@@ -1,7 +1,7 @@
 ---
 name: agent-api-security
 description: Audits all API routes for RBAC correctness, org scoping, IDOR vulnerabilities, input validation, idempotency, transactions, rate limits, and error sanitization. Run before any PR merge that touches backend routes.
-model: sonnet
+model: claude-opus-4-7
 ---
 
 ## Auto-trigger conditions
