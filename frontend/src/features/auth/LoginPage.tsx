@@ -1,26 +1,21 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Loader2, LogIn } from 'lucide-react';
+import { LoginSchema, type LoginInput } from '@boilerplate/shared';
 import { useLoginMutation } from './authApi';
 import { setCredentials } from './authSlice';
 import { useAppDispatch } from '@/hooks/useAuth';
 
-const schema = z.object({
-  email: z.string().email('Enter a valid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = LoginInput;
 
 export function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(LoginSchema),
     defaultValues: { email: '', password: '' },
   });
 

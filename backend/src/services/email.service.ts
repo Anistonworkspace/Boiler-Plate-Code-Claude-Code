@@ -27,7 +27,8 @@ function getTransporter(): nodemailer.Transporter {
 export const emailService = {
   async sendNow(payload: EmailPayload): Promise<void> {
     if (!env.SMTP_HOST) {
-      console.log(`[email] SMTP not configured. Would send to ${payload.to}: ${payload.subject}`);
+      // Silently skip in dev when SMTP_HOST is unset — email.service is functional otherwise
+      return;
       return;
     }
     await getTransporter().sendMail({
